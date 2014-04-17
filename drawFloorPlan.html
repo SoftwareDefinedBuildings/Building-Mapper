@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>FloorPlans</title>
+        <script type="text/javascript" src="d3/d3.v3.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+        var w = 1024;
+        var h = 600;
+        var data = [];
+        var body = d3.select("body");
+        var lineTop;
+        var lineBottom;
+        var lineRight;
+        var lineLeft;
+        var svg = body.append("svg")
+        .attr("width", w)
+        .attr("height", h)
+        .on("mousedown", mousedown)
+        .on("mouseup", mouseup);
+
+        function mousedown() {
+            var m = d3.mouse(this);
+            lineTop = svg.append("line")
+                .attr("x1", m[0])
+                .attr("y1", m[1])
+                .attr("x2", m[0])
+                .attr("y2", m[1]);
+            lineBottom = svg.append("line")
+                .attr("x1", m[0])
+                .attr("y1", m[1])
+                .attr("x2", m[0])
+                .attr("y2", m[1]);
+            lineRight = svg.append("line")
+                .attr("x1", m[0])
+                .attr("y1", m[1])
+                .attr("x2", m[0])
+                .attr("y2", m[1]);
+            lineLeft = svg.append("line")
+                .attr("x1", m[0])
+                .attr("y1", m[1])
+                .attr("x2", m[0])
+                .attr("y2", m[1]);
+            svg.on("mousemove", mousemove);
+        }
+
+        function mousemove() {
+            var m = d3.mouse(this);
+            if (lineTop !== null && lineBottom !== null && lineLeft !== null && lineRight !== null) {
+                lineTop
+                    .attr("x2", m[0]);
+                lineBottom
+                    .attr("y1", m[1])
+                    .attr("x2", m[0])
+                    .attr("y2", m[1]);
+                lineRight
+                    .attr("x1", m[0])
+                    .attr("x2", m[0])
+                    .attr("y2", m[1]);
+                lineLeft
+                    .attr("y2", m[1]);
+            }
+        }
+
+        function mouseup() {
+            data.push([lineTop, lineBottom, lineRight, lineLeft]);
+            lineTop = null;
+            lineBottom = null;
+            lineRight = null;
+            lineLeft = null;
+            svg.selectAll("line").on("click", lineClick);
+            svg.on("mousemove", null);
+        }
+
+
+        function lineClick() {
+            console.log(this);
+            this.remove();
+        }
+        
+        svg.append("rect")
+        .attr("height", 50)
+        .attr("width", 50)
+        .attr("fill", "white")
+        .attr("stroke", "blue")
+        .attr("stroke-width", 10)
+        .on("mousedown", function() {
+                d3.event.stopPropagation();
+                console.log("alkf");});
+
+
+        </script>
+
+        <style>
+            line {
+                stroke: black;
+                stroke-width:5px;
+            }
+        </style>
+
+
+    </body>

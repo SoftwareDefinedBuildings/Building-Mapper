@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Floor plans</title>
+    <link rel="stylesheet" href="{{ static('assets/css/normalize.css') }}" />
+    <link rel="stylesheet" href="{{ static('assets/css/foundation.css') }}" />
+    <link rel="stylesheet" href="{{ static('assets/css/app.css') }}" />
+  </head>
+  <body>
+    <div class="row main-container">
+      <div class="small-12 columns">
+        <h1>View Soda Hall Floors</h1>
+        {% for floor in floors %}
+          <a href="#{{floor}}" class="button">{{floor}}</a>
+        {% endfor %}
+        <a href="/create" class="button">+</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>FloorPlans</title>
+        <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <script type="text/javascript" src="js/models.js"></script>
+
+        <style>
+            line {
+                stroke: black;
+                stroke-width:5px;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <script type="text/javascript">
+        var p1 = new Point(100, 500),
+            p2 = new Point(100, 800),
+            p3 = new Point(200, 800),
+            p4 = new Point(200, 500);
+
+        var zone = new Zone([p1, p2, p3, p4]);
+
+        var w = 1024;
+        var h = 600;
+        var data = [];
+        var body = d3.select("body");
+
+        var svg = body.append("svg")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .on("mousedown", mousedown)
+                    .on("mouseup", mouseup);
+
+        function mousedown() {
+            var m = d3.mouse(this);
+            var zone = new Zone()
+            svg.on("mousemove", mousemove);
+        }
+
+        function mousemove() {
+            var m = d3.mouse(this);
+        }
+
+        function mouseup() {
+            svg.on("mousemove", null);
+        }
+
+
+        function lineClick() {
+            console.log(this);
+            this.remove();
+        }
+        
+        svg.append("rect")
+        .attr("height", 50)
+        .attr("width", 50)
+        .attr("fill", "white")
+        .attr("stroke", "blue")
+        .attr("stroke-width", 10)
+        .on("mousedown", function() {
+                d3.event.stopPropagation();
+                console.log("alkf");});
+
+
+        </script>
+
+    </body>

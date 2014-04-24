@@ -17,12 +17,12 @@ def create_new_floor():
     if request.method == 'GET':
         return render_template('create.html')
     else:
-        return 'do some post stuff'
+        return 'do some post stuff to create the new floor'
 
 
-@app.route('/view')
-def get_floor_data():
-    return 'Some floor data'
+@app.route('/view/<floor_label>')
+def get_floor_data(floor_label):
+    return render_template('view.html', floor_label=floor_label)
 
 
 if __name__ == '__main__':

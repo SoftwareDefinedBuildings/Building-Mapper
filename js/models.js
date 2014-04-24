@@ -132,6 +132,18 @@ Zone.prototype.setFromTopLeftPoint = function(x, y) {
     ];
 };
 
+Zone.prototype.updateFromBottomRight = function(x, y) {
+    // top left
+        // nothing
+    // top right
+    this.points[1].x = x;
+    // bottom left
+    this.points[2].y = y;
+    // bottom right
+    this.points[3].x = x;
+    this.points[3].y = y;
+};
+
 
 var Floor = function(input_zones) {
     if (typeof input_zones === 'undefined') {

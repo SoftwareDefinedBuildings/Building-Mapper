@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+	<title>Index</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+
+	function uploadFile(file) {
+		var xhr = new XMLHttpRequest();
+		if (xhr.upload && file.type === "image/jpeg"){
+			xhr.open("POST", "/up", true);
+			xhr.setRequestHeader("X-File-Name", file.name);
+			xhr.send(file);
+		}
+	}
+
+	function uploadWithJQ(file) {
+		$.ajax({
+			url: '/up',
+			type: 'POST',
+			processData: false,
+      contentType: 'application/octet-stream',
+			beforeSend: function(request) {
+				request.setRequestHeader("X-File-Name", file.name);
+			},
+			data: file
+		});
+	}
+
+	function handleFileSelect(evt) {
+		var files = evt.target.files || evt.dataTransfer.files;  //FileList obj
+		console.log(evt.target.files);
+		for (var i = 0, f; f = files[i]; i++) {
+			console.log(f.name, f.size, f.type);
+			//uploadFile(f);
+			uploadWithJQ(f);
+		}
+	}
+	$(document).ready(function(){
+		$('#fileselect').on('change', handleFileSelect);
+	});
+	</script>
+	
+</head>
+<body>
+	<input type="file" id="fileselect"/>
+
+</body>
+</html>

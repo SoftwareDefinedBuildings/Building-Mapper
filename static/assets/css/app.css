@@ -16,7 +16,8 @@ h1.inline {
 
 input.title-input {
   display: inline;
-  width: 250px;
+  margin-left: 20px;
+  width: 200px;
   height: 2em;
   font-size: 3em;
   border: none;

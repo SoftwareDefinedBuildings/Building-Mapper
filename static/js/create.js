@@ -4,7 +4,16 @@ var acceptedTypes = {
     'image/gif': true
 };
 
-var CreatorPage = function(imageHolder) {
+/**
+ * CreatorPage is the UI component object that encapsulates all JavaScript page
+ * interactions on the create new floor plan page.
+ *
+ * @constructor
+ * @param {jQuery selector} floorLabel is the input field for the floor label
+ * @param {jQuery selector} submitButton is the submission button
+ * @param {jQuery selector} imageHolder is the drop zone for the img floorplan
+ */
+var CreatorPage = function(floorLabel, submitButton, imageHolder) {
     var that = this;
 
     this.imageFile = null;
@@ -12,6 +21,9 @@ var CreatorPage = function(imageHolder) {
     // set child elements
     this.children = {};
     this.children.imageHolder = imageHolder;
+    this.children.floorLabel = floorLabel;
+    this.children.submitButton = submitButton;
+    this.children.canvas = null;
 
     // set holder callbacks
     this.children.imageHolder.on('dragover', function(e) {
@@ -30,12 +42,21 @@ var CreatorPage = function(imageHolder) {
         e.preventDefault();
         e.stopPropagation();
         that.children.imageHolder.removeClass('hover');
-        if (e.originalEvent.dataTransfer.files.length === 1) {
-            that.setImage(e.originalEvent.dataTransfer.files[0]);
+        if (that.imageFile === null) {
+            // image file not set yet.
+            if (e.originalEvent.dataTransfer.files.length === 1) {
+                that.setImage(e.originalEvent.dataTransfer.files[0]);
+            }
+        } else {
+            // image file already set. should ask if want to replace
+            // note that canvas needs to be replaced as well.
         }
     });
-};
 
+    this.children.submitButton.on('click', function(e) {
+        that.publish();
+    });
+};
 
 CreatorPage.prototype.uploadImage = function(file) {
     $.ajax({
@@ -54,6 +75,7 @@ CreatorPage.prototype.setImage = function(file) {
     this.previewFile(file);
     this.imageFile = file;
     this.children.imageHolder.addClass('solidified');
+    // add canvas
 };
 
 CreatorPage.prototype.previewFile = function(file) {
@@ -75,3 +97,27 @@ CreatorPage.prototype.previewFile = function(file) {
     }
 };
 
+CreatorPage.prototype.attachCanvas = function() {
+};
+
+CreatorPage.prototype.publish = function() {
+    var floorLabelText = this.children.floorLabel.val();
+    this.disableUI();
+    // upload the image to server
+    //this.uploadImage(this.imageFile);
+    console.log(floorLabelText);
+    console.log(this.imageFile);
+};
+
+CreatorPage.prototype.validateInput = function() {
+};
+
+CreatorPage.prototype.disableUI = function() {
+    this.children.floorLabel.attr('disabled', 'disabled');
+    this.children.submitButton.attr('disabled', 'disabled');
+};
+
+CreatorPage.prototype.enableUI = function() {
+    this.children.floorLabel.removeAttr('disabled');
+    this.children.submitButton.removeAttr('disabled');
+};

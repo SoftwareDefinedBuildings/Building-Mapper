@@ -30,3 +30,25 @@ input.title-input {
 input.title-input:focus {
   border-radius: 5px;
 }
+
+#holder {
+  border: 10px dashed #ccc;
+  width: 100%;
+  min-height: 400px;
+  margin: 20px auto;
+}
+#holder.solidified {
+  border-style: solid;
+}
+
+#holder.hover {
+  border-color: #0c0;
+}
+#holder img {
+  display: block;
+  margin: 10px auto;
+}
+#holder p {
+  margin: 10px;
+  font-size: 14px;
+}

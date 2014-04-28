@@ -53,6 +53,7 @@ CreatorPage.prototype.uploadImage = function(file) {
 CreatorPage.prototype.setImage = function(file) {
     this.previewFile(file);
     this.imageFile = file;
+    this.children.imageHolder.addClass('solidified');
 };
 
 CreatorPage.prototype.previewFile = function(file) {

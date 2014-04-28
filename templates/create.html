@@ -31,52 +31,9 @@
         <div id="holder"></div>
       </div>
     </div>
+    <script src="{{ static('js/create.js') }}"></script>
     <script type="text/javascript" charset="utf-8">
-      var uploadImage = function(file) {
-        $.ajax({
-          url: '/up',
-          type: 'POST',
-          processData: false,
-          contentType: 'application/octet-stream',
-          beforeSend: function(request) {
-            request.setRequestHeader("X-File-Name", file.name);
-          },
-          data: file
-        });
-      };
-      var holder = document.getElementById('holder'),
-          acceptedTypes = {
-            'image/png': true,
-            'image/jpeg': true,
-            'image/gif': true
-          },
-          progress = document.getElementById('uploadprogress'),
-          fileupload = document.getElementById('upload');
-
-      function previewfile(file) {
-        if (tests.filereader === true && acceptedTypes[file.type] === true) {
-          var reader = new FileReader();
-          reader.onload = function (event) {
-            var image = new Image();
-            image.src = event.target.result;
-            image.width = 250; // a fake resize
-            holder.appendChild(image);
-          };
-
-          reader.readAsDataURL(file);
-        }  else {
-          console.log('Not an acceptable file type!');
-          console.log(file);
-        }
-      }
-
-      holder.ondragover = function () { this.className = 'hover'; return false; };
-      holder.ondragend = function () { this.className = ''; return false; };
-      holder.ondrop = function (e) {
-        this.className = '';
-        e.preventDefault();
-        readfiles(e.dataTransfer.files);
-      };
+    var cp = new CreatorPage($('#holder'));
     </script>
 
   </body>

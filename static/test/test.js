@@ -29,14 +29,14 @@ describe('Point', function(){
 });
 
 
-describe('Zone', function(){
+describe('Shape', function(){
   describe('#()', function(){
     it('Should return new object with a list of points', function(){
         var p1 = new models.Point(1, 1);
         var p2 = new models.Point(1, 2);
         var p3 = new models.Point(1, 2);
         var points = [p1, p2, p3];
-        var zone = new models.Zone(points);
+        var zone = new models.Shape(points);
         assert.equal(zone.points.length, 3);
         assert.equal(zone.points[0], p1);
         assert.equal(zone.points[1], p2);
@@ -49,7 +49,7 @@ describe('Zone', function(){
         var p2 = new models.Point(1, 2);
         var p3 = new models.Point(1, 2);
         var points = [p1, p2, p3];
-        var zone = new models.Zone(points);
+        var zone = new models.Shape(points);
         var o = zone.toJSON();
         assert.equal(o.points.length, 3);
     });
@@ -61,7 +61,7 @@ describe('Zone', function(){
         var p3 = new models.Point(2, 2);
         var p4 = new models.Point(1, 2);
         var points = [p1, p2, p3, p4];
-        var zone = new models.Zone(points);
+        var zone = new models.Shape(points);
         assert.equal(zone.getTopLeftPoint(), p1);
     });
   });
@@ -72,7 +72,7 @@ describe('Zone', function(){
         var p3 = new models.Point(2, 2);
         var p4 = new models.Point(1, 2);
         var points = [p1, p2, p3, p4];
-        var zone = new models.Zone(points);
+        var zone = new models.Shape(points);
         assert.equal(zone.getBottomRightPoint(), p3);
     });
   });
@@ -83,7 +83,7 @@ describe('Zone', function(){
         var p3 = new models.Point(2, 2);
         var p4 = new models.Point(1, 2);
         var points = [p1, p2, p3, p4];
-        var zone = new models.Zone(points);
+        var zone = new models.Shape(points);
         assert.equal(zone.getTopRightPoint(), p2);
     });
   });
@@ -94,7 +94,7 @@ describe('Zone', function(){
         var p3 = new models.Point(2, 2);
         var p4 = new models.Point(1, 2);
         var points = [p1, p2, p3, p4];
-        var zone = new models.Zone(points);
+        var zone = new models.Shape(points);
         assert.equal(zone.getBottomLeftPoint(), p4);
     });
   });

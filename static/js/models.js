@@ -59,7 +59,7 @@ Point.prototype.equals = function(p) {
     return p.x === this.x && p.y === this.y;
 };
 
-var Zone = function(points) {
+var Shape = function(points) {
     if (typeof points === 'undefined'){
         this.points = [];
     } else {
@@ -69,7 +69,7 @@ var Zone = function(points) {
 
 };
 
-Zone.prototype.toJSON = function() {
+Shape.prototype.toJSON = function() {
     var json_points = [];
     for (var i = 0; i < this.points.length; i++) {
         json_points.push(this.points[i].toJSON());
@@ -80,7 +80,7 @@ Zone.prototype.toJSON = function() {
     };
 };
 
-Zone.prototype.findPointIdx = function(x, y) {
+Shape.prototype.findPointIdx = function(x, y) {
     var p = new Point(x, y);
     for (var i = 0; i < this.points.length; i++) {
         if (this.points[i].equals(p)) {
@@ -91,39 +91,47 @@ Zone.prototype.findPointIdx = function(x, y) {
     return -1;
 };
 
-Zone.prototype.getPoints = function() {
+Shape.prototype.getPoints = function() {
     return this.points;
 };
 
-Zone.prototype.getTopLeftPoint = function() {
+Shape.prototype.getTopLeftPoint = function() {
     var xIdx = Util.argmin(this.points, Point.getX),
         yIdx = Util.argmin(this.points, Point.getY);
     return this.points[this.findPointIdx(this.points[xIdx].x, this.points[yIdx].y)];
 };
 
-Zone.prototype.getTopRightPoint = function() {
+Shape.prototype.getTopRightPoint = function() {
     var xIdx = Util.argmax(this.points, Point.getX),
         yIdx = Util.argmin(this.points, Point.getY);
     return this.points[this.findPointIdx(this.points[xIdx].x, this.points[yIdx].y)];
 };
 
-Zone.prototype.getBottomRightPoint = function() {
+Shape.prototype.getBottomRightPoint = function() {
     var xIdx = Util.argmax(this.points, Point.getX),
         yIdx = Util.argmax(this.points, Point.getY);
     return this.points[this.findPointIdx(this.points[xIdx].x, this.points[yIdx].y)];
 };
 
-Zone.prototype.getBottomLeftPoint = function() {
+Shape.prototype.getBottomLeftPoint = function() {
     var xIdx = Util.argmin(this.points, Point.getX),
         yIdx = Util.argmax(this.points, Point.getY);
     return this.points[this.findPointIdx(this.points[xIdx].x, this.points[yIdx].y)];
 };
 
-Zone.prototype.setPoints = function(points) {
+Shape.prototype.getHeight = function() {
+    //TODO: get height of rectangle
+};
+
+Shape.prototype.getWidth = function() {
+    //TODO: get width of rectangle
+};
+
+Shape.prototype.setPoints = function(points) {
     this.points = points;
 };
 
-Zone.prototype.setFromTopLeftPoint = function(x, y) {
+Shape.prototype.setFromTopLeftPoint = function(x, y) {
     this.points = [
         new Point(x, y),
         new Point(x, y),
@@ -132,7 +140,7 @@ Zone.prototype.setFromTopLeftPoint = function(x, y) {
     ];
 };
 
-Zone.prototype.updateFromBottomRight = function(x, y) {
+Shape.prototype.updateFromBottomRight = function(x, y) {
     // top left
         // nothing
     // top right
@@ -144,6 +152,29 @@ Zone.prototype.updateFromBottomRight = function(x, y) {
     this.points[3].y = y;
 };
 
+var Zone = function(shape) {
+    this.shape = shape;
+    this.label = '';
+    this.extras = {};
+};
+
+Zone.prototype.setLabel = function(label) {
+    this.label = label;
+};
+
+Zone.prototype.getLabel = function() {
+    return this.label;
+};
+
+Zone.prototype.setExtras = function(attributes) {
+    //TODO: test for attribute membership
+};
+
+Zone.prototype.toJSON = function () {
+    return {
+        shape: this.shape.toJSON()
+    };
+};
 
 var Floor = function(input_zones) {
     if (typeof input_zones === 'undefined') {
@@ -169,7 +200,7 @@ if (typeof module === 'undefined') {
 }
 module.exports = {
     Point: Point,
-    Zone: Zone,
+    Shape: Shape,
     Floor: Floor,
     Util: Util
 };

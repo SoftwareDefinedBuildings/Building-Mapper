@@ -118,15 +118,24 @@ CreatorPage.prototype.publish = function() {
     var floorLabelText = this.children.floorLabel.val();
     this.disableUI();
     if (floorLabelText.length > 0) {
-        // upload the image to server
-        //this.uploadImage(this.imageFile);
-        console.log(floorLabelText);
-        console.log(this.imageFile);
+        if (this.imageFile !== null) {
+            // upload the image to server
+            //this.uploadImage(this.imageFile);
+            console.log(floorLabelText);
+            console.log(this.imageFile);
+        } else {
+            alert("Please drop in a floorplan image");
+            this.enableUI();
+        }
     } else {
         alert("Please enter a floor label");
         this.enableUI();
         this.children.floorLabel.focus();
     }
+};
+
+CreatorPage.prototype.flashDropzone = function() {
+    //TODO: flash the drop zone
 };
 
 CreatorPage.prototype.disableUI = function() {

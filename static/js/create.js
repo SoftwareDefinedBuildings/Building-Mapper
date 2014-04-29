@@ -69,8 +69,13 @@ CreatorPage.prototype.uploadImage = function(file) {
         beforeSend: function(request) {
             request.setRequestHeader("X-File-Name", file.name);
         },
-        data: file
+        data: file,
+        success: this.submitData.bind(this)
     });
+};
+
+CreatorPage.prototype.submitData = function(response) {
+    // send img file name & floor label & zone info
 };
 
 CreatorPage.prototype.setImage = function(file) {
@@ -99,6 +104,9 @@ CreatorPage.prototype.previewFile = function(file) {
 
                 that.children.imageHolder.html('');
                 that.children.imageHolder.append(svg);
+
+                // needed hack to re-render the drop space
+                that.children.imageHolder.css('background', 'transparent');
             };
 
             image.src = _URL.createObjectURL(file);
@@ -111,16 +119,13 @@ CreatorPage.prototype.previewFile = function(file) {
     }
 };
 
-CreatorPage.prototype.attachCanvas = function() {
-};
-
 CreatorPage.prototype.publish = function() {
     var floorLabelText = this.children.floorLabel.val();
     this.disableUI();
     if (floorLabelText.length > 0) {
         if (this.imageFile !== null) {
             // upload the image to server
-            //this.uploadImage(this.imageFile);
+            this.uploadImage(this.imageFile);
             console.log(floorLabelText);
             console.log(this.imageFile);
         } else {

@@ -1,3 +1,5 @@
+var _URL = window.URL || window.webkitURL;
+
 var acceptedTypes = {
     'image/png': true,
     'image/jpeg': true,
@@ -84,10 +86,22 @@ CreatorPage.prototype.previewFile = function(file) {
         var reader = new FileReader();
         reader.onload = function (event) {
             var image = new Image();
-            image.src = event.target.result;
-            image.className = 'floor-img';
-            that.children.imageHolder.html("");
-            that.children.imageHolder.append(image);
+            //image.src = event.target.result;
+            //image.className = 'floor-img';
+            //that.children.imageHolder.html("");
+            //that.children.imageHolder.append(image);
+            var svg = $('<svg id="img-canvas">');
+
+            image.onload = function() {
+                svg.css('background-image', 'url(' + event.target.result + ')');
+                svg.attr('height', this.height);
+                svg.attr('width', this.width);
+
+                that.children.imageHolder.html('');
+                that.children.imageHolder.append(svg);
+            };
+
+            image.src = _URL.createObjectURL(file);
         };
 
         reader.readAsDataURL(file);
@@ -103,13 +117,16 @@ CreatorPage.prototype.attachCanvas = function() {
 CreatorPage.prototype.publish = function() {
     var floorLabelText = this.children.floorLabel.val();
     this.disableUI();
-    // upload the image to server
-    //this.uploadImage(this.imageFile);
-    console.log(floorLabelText);
-    console.log(this.imageFile);
-};
-
-CreatorPage.prototype.validateInput = function() {
+    if (floorLabelText.length > 0) {
+        // upload the image to server
+        //this.uploadImage(this.imageFile);
+        console.log(floorLabelText);
+        console.log(this.imageFile);
+    } else {
+        alert("Please enter a floor label");
+        this.enableUI();
+        this.children.floorLabel.focus();
+    }
 };
 
 CreatorPage.prototype.disableUI = function() {

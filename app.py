@@ -1,4 +1,6 @@
 import os
+import json
+
 from datetime import datetime
 
 from flask import Flask
@@ -74,7 +76,15 @@ def create_new_floor():
         return render_template('create.html')
     else:
         # Otherwise it's a POST request
-        return render_template('create.html')
+        try:
+            data = json.loads(request.data)
+            process_floor_json(data)
+        except:
+            return jsonify(success=False, msg='Invalid JSON')
+
+
+def process_floor_json(data):
+    pass
 
 
 @app.route('/view/<floor_label>')

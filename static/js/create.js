@@ -75,7 +75,25 @@ CreatorPage.prototype.uploadImage = function(file) {
 };
 
 CreatorPage.prototype.submitData = function(response) {
+    var data = {
+        img: response.imgname,
+        zones: [1,2,3,4],
+        label: this.children.floorLabel.val()
+    };
     // send img file name & floor label & zone info
+    $.ajax({
+        url: '/create',
+        type: 'POST',
+        processData: false,
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        data: JSON.stringify(data),
+        success: this.successfulSubmit.bind(this)
+    });
+};
+
+CreatorPage.prototype.successfulSubmit = function(response) {
+    console.log("done!");
 };
 
 CreatorPage.prototype.setImage = function(file) {

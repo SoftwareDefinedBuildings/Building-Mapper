@@ -121,10 +121,18 @@ CreatorPage.prototype.previewFile = function(file) {
                             .attr('height', this.height)
                             .style('background-image', 'url(' + event.target.result + ')');
 
+                // hack for Safari and Chrome to get onclick event
+                svg.append('rect')
+                    .attr('x', 0)
+                    .attr('y', 0)
+                    .style('fill', 'transparent')
+                    .attr('width', this.width)
+                    .attr('height', this.height);
                 // needed hack to re-render the drop space
                 that.children.imageHolder.css('background', '#fff');
 
                 // setup the svg for drawing
+                that.children.imageHolder.off();
                 that.setupCanvas(svg);
             };
 

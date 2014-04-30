@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>FloorPlans</title>
         <script type="text/javascript" src="d3/d3.v3.js"></script>
-        <script type="text/javascript" src="Building-Mapper/static/js/models.js"></script>
+        <script type="text/javascript" src="js/models.js"></script>
     </head>
     <body>
         <script type="text/javascript">
@@ -47,8 +47,10 @@
                 currZone = null;
             } else {
                 currZone = null;
-                svg.selectAll("rect").on("click", rectClick);
-                svg.selectAll("rect").on("dblclick", dblrectClick);
+                svg.selectAll("rect").on("click", rectClick)
+                                    .on("dblclick", dblrectClick)
+                                    .on("mousedown", rectMouseDown)
+                                    .on("mouseup", rectMouseUp)
                 svg.on("mousemove", null);
             }
         }
@@ -92,16 +94,28 @@
         }
 
 
-        function rectClick() {
-            console.log("singleclick", this);
+        function rectClick(d){
+            console.log("singleclick", d);
             d3.event.stopPropagation();
             return false;
         }
-        function dblrectClick() {
-            console.log("doubleclick", this);
+
+        function dblrectClick(d) {
+            console.log("doubleclick", d);
             d3.event.stopPropagation();
             return false;
         }
+
+        function rectMouseDown(d) {
+            var m = d3.mouse(this);
+            console.log("mousedown", d);
+            d3.event.stopPropagation();
+        }
+
+        function rectMouseUp() {
+            var m = d3.mouse(this);
+        }
+
 
         </script>
 

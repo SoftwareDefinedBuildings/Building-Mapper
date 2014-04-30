@@ -98,6 +98,28 @@ describe('Shape', function(){
         assert.equal(zone.getBottomLeftPoint(), p4);
     });
   });
+  describe('#getHeight()', function(){
+    it('Should return int with value', function(){
+        var p1 = new models.Point(1, 1);
+        var p2 = new models.Point(8, 1);
+        var p3 = new models.Point(8, 6);
+        var p4 = new models.Point(1, 6);
+        var points = [p1, p2, p3, p4];
+        var shape = new models.Shape(points);
+        assert.equal(shape.getHeight(), 5);
+    });
+  });
+  describe('#getWidth()', function(){
+    it('Should return int with value', function(){
+        var p1 = new models.Point(1, 1);
+        var p2 = new models.Point(8, 1);
+        var p3 = new models.Point(8, 6);
+        var p4 = new models.Point(1, 6);
+        var points = [p1, p2, p3, p4];
+        var shape = new models.Shape(points);
+        assert.equal(shape.getWidth(), 7);
+    });
+  });
 });
 
 

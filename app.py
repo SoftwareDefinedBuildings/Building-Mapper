@@ -78,19 +78,37 @@ def create_new_floor():
         # Otherwise it's a POST request
         try:
             data = json.loads(request.data)
+            # request.data should be a Floor JSON object
+            # see static/js/models.js
             process_floor_json(data)
             return jsonify(success=True)
         except:
-            return jsonify(success=False, msg='Invalid JSON')
+            return jsonify(success=False, msg='Invalid Floor JSON')
 
 
 def process_floor_json(data):
-    pass
+    floor = Floor(data['label'], data['img'])
+    db.session.add(floor)
+
+    for zone in data['zones']:
+        shape_json = json.dumps(zone['shape'])
+        z = Zone(zone['label'], shape_json, floor, zone['extras'])
+        db.session.add(z)
+
+    db.session.commit()
 
 
-@app.route('/view/<floor_label>')
-def get_floor_data(floor_label):
-    return render_template('view.html', floor_label=floor_label)
+@app.route('/view/<floor_id>')
+def get_floor_data(floor_id):
+    try:
+        floor = Floor.query.filter(Floor.id == int(floor_id)).first()
+        if floor:
+            return render_template('view.html', floor=floor)
+        else:
+            return render_template('not_found.html')
+    except:
+        return render_template('not_found.html')
+
 
 @app.route('/upload_test')
 def test_upload():

@@ -172,6 +172,8 @@ Zone.prototype.setExtras = function(attributes) {
 
 Zone.prototype.toJSON = function () {
     return {
+        label: this.label,
+        extras: this.extras,
         shape: this.shape.toJSON()
     };
 };
@@ -182,6 +184,17 @@ var Floor = function(input_zones) {
     } else {
         this.zones = input_zones;
     }
+
+    this.label = '';
+    this.img = '';
+};
+
+Floor.prototype.setLabel = function(label) {
+    this.label = label;
+};
+
+Floor.prototype.setImg = function(imgFileName) {
+    this.img = imgFileName;
 };
 
 Floor.prototype.toJSON = function() {
@@ -190,6 +203,8 @@ Floor.prototype.toJSON = function() {
         json_points.push(this.zones[i].toJSON());
     }
     return {
+        label: this.label,
+        img: this.img,
         zones: json_zones
     };
 };

@@ -48,6 +48,14 @@ Point.getY = function(p) {
     return p.y;
 };
 
+Point.prototype.setX = function(x) {
+    this.x = x;
+};
+
+Point.prototype.setY = function(x) {
+    this.y = y;
+};
+
 Point.prototype.toJSON = function() {
     return {
         x: this.x,
@@ -60,13 +68,15 @@ Point.prototype.equals = function(p) {
 };
 
 var Shape = function(points) {
+    // when drawing...
+    // this.point[0] will be starting point
+    // this.point[3] will be where the cursor is
     if (typeof points === 'undefined'){
         this.points = [];
     } else {
         // list of point
         this.points = points;
     }
-
 };
 
 Shape.prototype.toJSON = function() {
@@ -120,11 +130,11 @@ Shape.prototype.getBottomLeftPoint = function() {
 };
 
 Shape.prototype.getHeight = function() {
-    //TODO: get height of rectangle
+    return this.getBottomRightPoint().y - this.getTopLeftPoint().y;
 };
 
 Shape.prototype.getWidth = function() {
-    //TODO: get width of rectangle
+    return this.getBottomRightPoint().x - this.getTopLeftPoint().x;
 };
 
 Shape.prototype.setPoints = function(points) {

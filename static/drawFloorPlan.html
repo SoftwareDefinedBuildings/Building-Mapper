@@ -4,101 +4,105 @@
         <meta charset="utf-8">
         <title>FloorPlans</title>
         <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <script type="text/javascript" src="Building-Mapper/static/js/models.js"></script>
     </head>
     <body>
         <script type="text/javascript">
         var w = 1024;
         var h = 600;
-        var data = [];
+        var zones = [];
         var body = d3.select("body");
-        var lineTop;
-        var lineBottom;
-        var lineRight;
-        var lineLeft;
         var svg = body.append("svg")
         .attr("width", w)
         .attr("height", h)
         .on("mousedown", mousedown)
         .on("mouseup", mouseup);
 
+        var zone = svg.selectAll("rect")
+                        .data(zones);
+        var currZone;
+
         function mousedown() {
             var m = d3.mouse(this);
-            lineTop = svg.append("line")
-                .attr("x1", m[0])
-                .attr("y1", m[1])
-                .attr("x2", m[0])
-                .attr("y2", m[1]);
-            lineBottom = svg.append("line")
-                .attr("x1", m[0])
-                .attr("y1", m[1])
-                .attr("x2", m[0])
-                .attr("y2", m[1]);
-            lineRight = svg.append("line")
-                .attr("x1", m[0])
-                .attr("y1", m[1])
-                .attr("x2", m[0])
-                .attr("y2", m[1]);
-            lineLeft = svg.append("line")
-                .attr("x1", m[0])
-                .attr("y1", m[1])
-                .attr("x2", m[0])
-                .attr("y2", m[1]);
+            currZone = new Zone(new Shape());
+            currZone.shape.setFromTopLeftPoint(m[0], m[1]);
+            zones.push(currZone);
+            redraw();
             svg.on("mousemove", mousemove);
         }
 
         function mousemove() {
             var m = d3.mouse(this);
-            if (lineTop !== null && lineBottom !== null && lineLeft !== null && lineRight !== null) {
-                lineTop
-                    .attr("x2", m[0]);
-                lineBottom
-                    .attr("y1", m[1])
-                    .attr("x2", m[0])
-                    .attr("y2", m[1]);
-                lineRight
-                    .attr("x1", m[0])
-                    .attr("x2", m[0])
-                    .attr("y2", m[1]);
-                lineLeft
-                    .attr("y2", m[1]);
+            if (currZone != null) {
+                currZone.shape.updateFromBottomRight(m[0], m[1]);
+                redraw();
             }
         }
 
         function mouseup() {
-            data.push([lineTop, lineBottom, lineRight, lineLeft]);
-            lineTop = null;
-            lineBottom = null;
-            lineRight = null;
-            lineLeft = null;
-            svg.selectAll("line").on("click", lineClick);
-            svg.on("mousemove", null);
+            var m = d3.mouse(this);
+            if (currZone.shape.getHeight() < 5 || currZone.shape.getWidth() < 5) {
+                zones.pop(zones.length -1);
+                redraw();
+                currZone = null;
+            } else {
+                currZone = null;
+                svg.selectAll("rect").on("click", rectClick);
+                svg.selectAll("rect").on("dblclick", dblrectClick);
+                svg.on("mousemove", null);
+            }
+        }
+
+        function redraw() {
+            var zone = svg.selectAll("rect").data(zones);
+            zone.enter()
+            .append("rect")
+            .attr("x", function(d) {
+                    return d.shape.getTopLeftPoint().x;
+                    })
+            .attr("y", function(d) {
+                    return d.shape.getTopLeftPoint().y;
+                    })
+            .attr("height", function(d) {
+                    return 0;
+                    })
+            .attr("width", function(d) {
+                    return 0;
+                    })
+            .attr("stroke", "black")
+            .attr("stroke-width", "3")
+            .attr("fill", "red");
+
+            zone.transition()
+                .duration(10)
+                .attr("x", function(d) {
+                        return d.shape.getTopLeftPoint().x;
+                        })
+                .attr("y", function(d) {
+                        return d.shape.getTopLeftPoint().y;
+                        })
+                .attr("height", function(d) {
+                    return Math.abs(d.shape.getTopLeftPoint().y - d.shape.getBottomRightPoint().y);
+                        })
+                .attr("width", function(d) {
+                        return Math.abs(d.shape.getTopLeftPoint().x - d.shape.getBottomRightPoint().x);
+                        });
+                
+            zone.exit().remove();
         }
 
 
-        function lineClick() {
-            console.log(this);
-            this.remove();
+        function rectClick() {
+            console.log("singleclick", this);
+            d3.event.stopPropagation();
+            return false;
         }
-        
-        svg.append("rect")
-        .attr("height", 50)
-        .attr("width", 50)
-        .attr("fill", "white")
-        .attr("stroke", "blue")
-        .attr("stroke-width", 10)
-        .on("mousedown", function() {
-                d3.event.stopPropagation();
-                console.log("alkf");});
-
+        function dblrectClick() {
+            console.log("doubleclick", this);
+            d3.event.stopPropagation();
+            return false;
+        }
 
         </script>
-
-        <style>
-            line {
-                stroke: black;
-                stroke-width:5px;
-            }
-        </style>
-
 
     </body>

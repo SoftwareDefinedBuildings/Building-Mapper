@@ -146,6 +146,80 @@ CreatorPage.prototype.setupCanvas = function(svg) {
     this.zones = [];
 
     // svg is the d3 svg object, it is available to all functions defined within this scope
+
+    var currZone;
+
+
+    function svgMouseDown() {
+        var m = d3.mouse(this);
+        currZone = new Zone(new Shape());
+        currZone.shape.setFromTopLeftPoint(m[0], m[1]);
+        that.zones.push(currZone);
+        redraw();
+        svg.on("mousemove", svgMouseMove);
+    }
+
+    function svgMouseMove() {
+        var m = d3.mouse(this);
+        if (currZone !== null) {
+            currZone.shape.updateFromBottomRight(m[0], m[1]);
+            redraw();
+        }
+    }
+
+    function svgMouseUp() {
+        var m = d3.mouse(this);
+        if (currZone.shape.getHeight() < 5 || currZone.shape.getWidth() < 5) {
+            that.zones.pop(that.zones.length -1);
+            redraw();
+            currZone = null;
+        } else {
+            currZone = null;
+            svg.on("mousemove", null);
+        }
+    }
+
+    function redraw() {
+        var zone = svg.selectAll(".rectZone").data(that.zones);
+        zone.enter()
+        .append("rect")
+        .attr("class", "rectZone")
+        .attr("x", function(d) {
+                return d.shape.getTopLeftPoint().x;
+                })
+        .attr("y", function(d) {
+                return d.shape.getTopLeftPoint().y;
+                })
+        .attr("height", function(d) {
+                return 0;
+                })
+        .attr("width", function(d) {
+                return 0;
+                })
+        .attr("stroke", "black")
+        .attr("stroke-width", "3")
+        .attr("fill", "red");
+
+        zone.transition()
+            .duration(10)
+            .attr("x", function(d) {
+                    return d.shape.getTopLeftPoint().x;
+                    })
+            .attr("y", function(d) {
+                    return d.shape.getTopLeftPoint().y;
+                    })
+            .attr("height", function(d) {
+                return Math.abs(d.shape.getTopLeftPoint().y - d.shape.getBottomRightPoint().y);
+                    })
+            .attr("width", function(d) {
+                    return Math.abs(d.shape.getTopLeftPoint().x - d.shape.getBottomRightPoint().x);
+                    });
+            
+        zone.exit().remove();
+    }
+
+    svg.on("mousedown", svgMouseDown)
+        .on("mouseup", svgMouseUp);
 };
 
 CreatorPage.prototype.publish = function() {

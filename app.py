@@ -25,15 +25,15 @@ db = SQLAlchemy(app)
 class Zone(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(80))
-    points = db.Column(db.Text)  # store as a json blob
+    shape = db.Column(db.Text)  # store as a json blob
     extras = db.Column(db.Text)  # store extra stuff as a blob
 
     floor_id = db.Column(db.Integer, db.ForeignKey('floor.id'))
     floor = db.relationship('Floor',
         backref=db.backref('zones', lazy='dynamic'))
 
-    def __init__(self, label, points, floor, extras=None):
-        self.points = []
+    def __init__(self, label, shape, floor, extras=None):
+        self.shape = shape
         self.label = label
         self.floor = floor
         if extras is None:
@@ -79,6 +79,7 @@ def create_new_floor():
         try:
             data = json.loads(request.data)
             process_floor_json(data)
+            return jsonify(success=True)
         except:
             return jsonify(success=False, msg='Invalid JSON')
 

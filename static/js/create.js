@@ -124,7 +124,7 @@ CreatorPage.prototype.previewFile = function(file) {
                 that.children.imageHolder.append(svg);
 
                 // needed hack to re-render the drop space
-                that.children.imageHolder.css('background', 'transparent');
+                that.children.imageHolder.css('background', '#fff');
             };
 
             image.src = _URL.createObjectURL(file);

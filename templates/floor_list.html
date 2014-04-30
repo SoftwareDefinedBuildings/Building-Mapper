@@ -13,7 +13,7 @@
       <div class="small-12 columns">
         <h1>View Soda Hall Floors</h1>
         {% for floor in floors %}
-          <a href="/view/{{floor.label}}" class="button">{{floor.label}}</a>
+          <a href="/view/{{floor.id}}" class="button">{{floor.label}}</a>
         {% endfor %}
         <a href="/create" class="button">+</a>
         <!-- check this out http://html5demos.com/dnd-upload#view-source -->

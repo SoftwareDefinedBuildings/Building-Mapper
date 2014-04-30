@@ -19,6 +19,7 @@ var CreatorPage = function(floorLabel, submitButton, imageHolder) {
     var that = this;
 
     this.imageFile = null;
+    this.zones = [];
 
     // set child elements
     this.children = {};
@@ -113,18 +114,18 @@ CreatorPage.prototype.previewFile = function(file) {
             //image.className = 'floor-img';
             //that.children.imageHolder.html("");
             //that.children.imageHolder.append(image);
-            var svg = $('<svg id="img-canvas">');
 
             image.onload = function() {
-                svg.css('background-image', 'url(' + event.target.result + ')');
-                svg.attr('height', this.height);
-                svg.attr('width', this.width);
-
-                that.children.imageHolder.html('');
-                that.children.imageHolder.append(svg);
+                var svg = d3.select(that.children.imageHolder[0]).append('svg')
+                            .attr('width', this.width)
+                            .attr('height', this.height)
+                            .style('background-image', 'url(' + event.target.result + ')');
 
                 // needed hack to re-render the drop space
                 that.children.imageHolder.css('background', '#fff');
+
+                // setup the svg for drawing
+                that.setupCanvas(svg);
             };
 
             image.src = _URL.createObjectURL(file);
@@ -135,6 +136,16 @@ CreatorPage.prototype.previewFile = function(file) {
         console.log('Not an acceptable file type!');
         console.log(file);
     }
+};
+
+CreatorPage.prototype.setupCanvas = function(svg) {
+    // you're going to need this to reference "this" in the event callback functions
+    var that = this;
+
+    // want to refernece that.zones in your callbacks
+    this.zones = [];
+
+    // svg is the d3 svg object, it is available to all functions defined within this scope
 };
 
 CreatorPage.prototype.publish = function() {

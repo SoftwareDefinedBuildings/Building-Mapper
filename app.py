@@ -37,10 +37,16 @@ class Zone(db.Model):
         self.label = label
         self.floor = floor
         if extras is None:
-            self.extras = ''
+            self.extras = '{}'
 
     def __repr__(self):
         return '<Zone %r>' % self.label
+
+    def toObj(self):
+        d = {}
+        d['label'] = self.label
+        d['shape'] = json.loads(self.shape)
+        return d
 
 
 class Floor(db.Model):
@@ -57,6 +63,17 @@ class Floor(db.Model):
 
     def __repr__(self):
         return '<Floor %r>' % self.label
+
+    def toObj(self):
+        z = []
+        for zone in self.zones:
+            z.append(zone.toObj())
+
+        return {
+            'label': self.label,
+            'imgname': self.img_name,
+            'zones': z
+        }
 
 
 def allowed_file(filename):
@@ -108,6 +125,17 @@ def get_floor_data(floor_id):
             return render_template('not_found.html')
     except:
         return render_template('not_found.html')
+
+@app.route('/fetch/floor/<floor_id>')
+def fetch_floor_data(floor_id):
+    try:
+        floor = Floor.query.filter(Floor.id == int(floor_id)).first()
+        if floor:
+            return jsonify(success=True, floor=floor.toObj(), msg='')
+        else:
+            return jsonify(success=False, msg='Could not find floor')
+    except:
+        return jsonify(success=False, msg='Could not find floor')
 
 
 @app.route('/upload_test')

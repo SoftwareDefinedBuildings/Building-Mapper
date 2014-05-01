@@ -1,8 +1,8 @@
-var ViewPage = function(floorLabel, imageHolder) {
+var ViewPage = function(floorId, imageHolder) {
     this.children = {};
     this.children.imageHolder = imageHolder;
 
-    this.floorLabel = floorLabel;
+    this.floorId = floorId;
 };
 
 ViewPage.prototype.fetchData = function() {
@@ -10,7 +10,7 @@ ViewPage.prototype.fetchData = function() {
 
 ViewPage.prototype.fetchFloor = function() {
     $.ajax({
-        url: '/fetch/floor/' + this.floorLabel,
+        url: '/fetch/floor/' + this.floorId,
         type: 'POST',
         processData: false,
         contentType: 'application/octet-stream',

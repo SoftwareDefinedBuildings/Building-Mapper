@@ -94,6 +94,7 @@ CreatorPage.prototype.submitData = function(response) {
 };
 
 CreatorPage.prototype.successfulSubmit = function(response) {
+    window.location = '/view/' + response.floorId;
     console.log("done!");
 };
 

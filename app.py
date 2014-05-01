@@ -98,8 +98,8 @@ def create_new_floor():
             data = json.loads(request.data)
             # request.data should be a Floor JSON object
             # see static/js/models.js
-            process_floor_json(data)
-            return jsonify(success=True)
+            fid = process_floor_json(data)
+            return jsonify(success=True, floorId=fid)
         except:
             return jsonify(success=False, msg='Invalid Floor JSON')
 
@@ -114,6 +114,7 @@ def process_floor_json(data):
         db.session.add(z)
 
     db.session.commit()
+    return floor.id
 
 
 @app.route('/view/<floor_id>')

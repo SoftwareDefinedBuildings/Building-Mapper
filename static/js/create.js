@@ -78,7 +78,7 @@ CreatorPage.prototype.uploadImage = function(file) {
 CreatorPage.prototype.submitData = function(response) {
     var data = {
         img: response.imgname,
-        zones: [1,2,3,4],
+        zones: this.zones,
         label: this.children.floorLabel.val()
     };
     // send img file name & floor label & zone info

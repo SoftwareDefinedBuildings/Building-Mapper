@@ -5,6 +5,7 @@ from datetime import datetime
 
 from flask import Flask
 from flask import render_template, url_for, request, jsonify
+from flask import send_from_directory
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
@@ -158,6 +159,11 @@ def upload_file():
         except:
             return jsonify(success=False, msg='Could not save file')
 
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                                   filename)
 
 if __name__ == '__main__':
     app.run(debug=True)

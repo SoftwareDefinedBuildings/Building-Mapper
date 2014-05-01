@@ -79,6 +79,16 @@ var Shape = function(points) {
     }
 };
 
+Shape.fromJSON = function(s) {
+    var shape = new Shape();
+    var points = [];
+    for (var i = 0; i < s.points.length; i++) {
+        points.push(new Point(s.points[i].x, s.points[i].y));
+    }
+    shape.setPoints(points);
+    return shape;
+};
+
 Shape.prototype.toJSON = function() {
     var json_points = [];
     for (var i = 0; i < this.points.length; i++) {
@@ -166,6 +176,18 @@ var Zone = function(shape) {
     this.shape = shape;
     this.label = '';
     this.extras = {};
+};
+
+Zone.fromJSONList = function(zoneList) {
+    var zones = [];
+    var s, z;
+    for (var i = 0; i < zoneList.length; i++) {
+        s = Shape.fromJSON(zoneList[i].shape);
+        z = new Zone(s);
+        z.setLabel(zoneList[i].label);
+        zones.push(z);
+    }
+    return zones;
 };
 
 Zone.prototype.setLabel = function(label) {

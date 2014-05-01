@@ -205,8 +205,9 @@ CreatorPage.prototype.setupCanvas = function(svg) {
                 return 0;
                 })
         .attr("stroke", "black")
-        .attr("stroke-width", "3")
-        .attr("fill", "red");
+        .attr("stroke-width", "1")
+        .attr("fill", "#0f57a0")
+        .attr("opacity", "0.8");
 
         zone.transition()
             .duration(10)

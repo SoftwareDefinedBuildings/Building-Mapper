@@ -14,15 +14,20 @@ ALLOWED_EXTENSIONS = ['JPEG', 'JPG', 'PNG', 'GIF']
 
 
 app = Flask(__name__)
+
+# Setup routing for static files
 app.jinja_env.globals['static'] = (
     lambda filename: url_for('static', filename=filename))
 
+# Setup folder paths for uploads and SQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.getcwd() + '/tmp/store.db'
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'tmp/uploads')
 
+# Instantiate db session
 db = SQLAlchemy(app)
 
 
+# Models
 class Zone(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(80))
@@ -77,11 +82,13 @@ class Floor(db.Model):
         }
 
 
+# Misc
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].upper() in ALLOWED_EXTENSIONS
 
 
+# Routes
 @app.route('/')
 def list_floors():
     floors = Floor.query.all()
@@ -140,11 +147,6 @@ def fetch_floor_data(floor_id):
         return jsonify(success=False, msg='Could not find floor')
 
 
-@app.route('/upload_test')
-def test_upload():
-    return render_template('test.html')
-
-
 @app.route('/up', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
@@ -167,4 +169,4 @@ def uploaded_file(filename):
                                    filename)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
